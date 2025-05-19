@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">ClearCents</string>
+    <string name="create_new_category">create new category</string>
+    <string name="category_name">category name</string>
+    <string name="monthly_budget_optional">monthly budget (optional)</string>
 </resources>
