@@ -18,8 +18,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.okabe.clearcents.feature_expenses.presentation.create_category.CreateCategoryRoot
 import com.okabe.clearcents.feature_expenses.presentation.create_category.CreateCategoryViewModel
+import com.okabe.clearcents.feature_expenses.presentation.dashboard.DashboardRoot
+import com.okabe.clearcents.feature_expenses.presentation.dashboard.DashboardScreen
+import com.okabe.clearcents.feature_expenses.presentation.dashboard.DashboardViewModel
 import com.okabe.clearcents.feature_expenses.presentation.navigation.Screen
 import com.okabe.clearcents.ui.theme.ClearCentsTheme
+import org.koin.androidx.compose.getViewModel
 import org.koin.androidx.compose.koinViewModel
 
 class MainActivity : ComponentActivity() {
@@ -54,19 +58,19 @@ fun ExpenseFeatureFlow() {
 fun AppNavigation(
     navController: NavHostController,
 ) {
-    NavHost(navController = navController, startDestination = Screen.CreateCategory) {
-        composable<Screen.CreateCategory>{
-            CreateCategoryRoot(
-                viewModel = koinViewModel(),
-                navController = navController,
-            )
-        }
-//        composable<Screen.Home> {
-//            DashboardScreen(
-//                viewModel
+    NavHost(navController = navController, startDestination = Screen.Home) {
+//        composable<Screen.CreateCategory>{
+//            CreateCategoryRoot(
+//                viewModel = koinViewModel(),
 //                navController = navController,
 //            )
 //        }
+        composable<Screen.Home> {
+            DashboardRoot(
+                viewModel = viewModel<DashboardViewModel>(),
+                navController = navController,
+            )
+        }
 //
 //        composable<CreateExpense> {
 //            AddExpenseScreen(

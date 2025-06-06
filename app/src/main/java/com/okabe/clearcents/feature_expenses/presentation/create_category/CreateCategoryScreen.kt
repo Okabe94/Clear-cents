@@ -41,6 +41,7 @@ import androidx.navigation.compose.rememberNavController
 import com.okabe.clearcents.R
 import com.okabe.clearcents.ui.theme.ClearCentsTheme
 import com.okabe.clearcents.util.capitalizeWords
+import org.koin.androidx.compose.koinViewModel
 import java.text.NumberFormat
 import java.util.Locale
 
@@ -57,7 +58,7 @@ private fun Preview() {
 
 @Composable
 fun CreateCategoryRoot(
-    viewModel: CreateCategoryViewModel = viewModel(),
+    viewModel: CreateCategoryViewModel = koinViewModel<CreateCategoryViewModel>(),
     navController: NavController = rememberNavController()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()

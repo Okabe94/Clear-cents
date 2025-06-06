@@ -1,4 +1,6 @@
 package com.okabe.clearcents.feature_expenses.presentation.dashboard
 
-class DashboardViewModel {
+import androidx.lifecycle.ViewModel
+
+class DashboardViewModel : ViewModel() {
 }
