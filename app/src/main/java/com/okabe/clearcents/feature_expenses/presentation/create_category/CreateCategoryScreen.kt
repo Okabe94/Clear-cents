@@ -3,13 +3,18 @@ package com.okabe.clearcents.feature_expenses.presentation.create_category
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -85,11 +90,6 @@ fun CreateCategoryScreen(
         topBar = {
             TopAppBar(
                 title = { Text(stringResource(R.string.create_new_category).capitalizeWords()) },
-                navigationIcon = {
-                    IconButton(onClick = { onAction(CreateCategoryAction.OnGoBack) }) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
-                    }
-                },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                     titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
@@ -97,26 +97,11 @@ fun CreateCategoryScreen(
                 )
             )
         },
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = { onAction(CreateCategoryAction.OnSave) },
-                containerColor =
-                    if (state.readyToSave) MaterialTheme.colorScheme.primary
-                    else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f)
-            ) {
-                Icon(
-                    Icons.Filled.Check, contentDescription = "Save Category",
-                    tint =
-                        if (state.readyToSave) MaterialTheme.colorScheme.onPrimary
-                        else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f)
-                )
-            }
-        }
     ) { paddingValues ->
         Column(
             modifier = Modifier
                 .padding(paddingValues)
-                .padding(16.dp)
+                .padding(24.dp)
                 .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(16.dp)
@@ -139,6 +124,19 @@ fun CreateCategoryScreen(
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                 visualTransformation = NumberCommaTransformation()
             )
+
+
+            Button(
+                enabled = state.readyToSave,
+                onClick = { onAction(CreateCategoryAction.OnSave) },
+                shape = MaterialTheme.shapes.small
+            ) {
+                Text(text = "Create", style = MaterialTheme.typography.bodyMedium)
+
+                Spacer(modifier = Modifier.width(8.dp))
+
+                Icon(Icons.Filled.Check, contentDescription = "Save Category")
+            }
         }
     }
 }

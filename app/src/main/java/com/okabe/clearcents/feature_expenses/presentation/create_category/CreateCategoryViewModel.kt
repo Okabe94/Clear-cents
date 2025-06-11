@@ -3,13 +3,18 @@ package com.okabe.clearcents.feature_expenses.presentation.create_category
 import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.okabe.clearcents.feature_expenses.data.dao.CategoryDao
+import com.okabe.clearcents.feature_expenses.data.entity.CategoryEntity
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
-class CreateCategoryViewModel : ViewModel() {
+class CreateCategoryViewModel(
+    private val categoryDao: CategoryDao
+) : ViewModel() {
 
     private val _state = MutableStateFlow(CreateCategoryInternalState())
     val state = _state.map {
@@ -52,9 +57,28 @@ class CreateCategoryViewModel : ViewModel() {
 
             }
 
-            CreateCategoryAction.OnGoBack -> TODO()
-            is CreateCategoryAction.OnNameChange -> TODO()
-            CreateCategoryAction.OnSave -> TODO()
+            is CreateCategoryAction.OnNameChange -> _state.update {
+                it.copy(
+                    name = action.name,
+                    readyToSave = action.name.isNotBlank()
+                )
+            }
+
+            CreateCategoryAction.OnSave -> {
+                viewModelScope.launch {
+                    val category = _state.value
+                    categoryDao.insertCategory(
+                        CategoryEntity(
+                            name = category.name,
+                            monthlyBudget = category.budgetValue
+                        )
+                    )
+
+                    _state.update { CreateCategoryInternalState() }
+                }
+            }
+
+            else -> Unit
         }
     }
 

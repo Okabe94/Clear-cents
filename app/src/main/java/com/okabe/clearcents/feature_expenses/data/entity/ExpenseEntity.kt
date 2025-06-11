@@ -8,19 +8,22 @@ import java.util.Date
 
 @Entity(
     tableName = "expenses",
-    foreignKeys = [ForeignKey(
-        entity = CategoryEntity::class,
-        parentColumns = ["categoryId"],
-        childColumns = ["categoryIdForeign"],
-        onDelete = ForeignKey.CASCADE
-    )],
+    foreignKeys = [
+        ForeignKey(
+            entity = CategoryEntity::class,
+            parentColumns = ["categoryId"],
+            childColumns = ["categoryIdForeign"],
+            onDelete = ForeignKey.CASCADE,
+            onUpdate = ForeignKey.CASCADE
+        )
+    ],
     indices = [Index(value = ["categoryIdForeign"])]
 )
 data class ExpenseEntity(
     @PrimaryKey(autoGenerate = true)
     val expenseId: Long = 0L,
     val categoryIdForeign: Long,
-    val amount: Double,
+    val amount: Long,
     val date: Date,
     val description: String? = null
 )

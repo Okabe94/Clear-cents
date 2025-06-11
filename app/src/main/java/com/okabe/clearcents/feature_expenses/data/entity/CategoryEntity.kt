@@ -8,5 +8,5 @@ data class CategoryEntity(
     @PrimaryKey(autoGenerate = true)
     val categoryId: Long = 0L,
     val name: String,
-    val monthlyBudget: Double
+    val monthlyBudget: Long?
 )

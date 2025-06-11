@@ -6,7 +6,7 @@ data class DashboardState(
 )
 
 data class DashboardCategory(
-    val id: String = "",
+    val id: Long = 0L,
     val name: String = "",
     val monthlyBudget: Long? = null,
     val spentAmount: Long = 0

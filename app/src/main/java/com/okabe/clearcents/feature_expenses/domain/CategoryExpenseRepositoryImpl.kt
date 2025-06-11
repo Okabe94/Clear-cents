@@ -9,7 +9,7 @@ class CategoryExpenseRepositoryImpl(
     override suspend fun getCategoryWithExpenses(categoryId: Long) =
         categoryExpenseDao.getCategoryWithExpenses(categoryId)
 
-    override suspend fun getAllCategoriesWithExpenses() =
+    override fun getAllCategoriesWithExpenses() =
         categoryExpenseDao.getAllCategoriesWithExpenses()
 
     override suspend fun getCategorySumForMonth(categoryId: Long, yearMonth: String): Double? =

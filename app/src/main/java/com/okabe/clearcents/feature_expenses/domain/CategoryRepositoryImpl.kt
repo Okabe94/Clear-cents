@@ -13,7 +13,11 @@ class CategoryRepositoryImpl(
     override suspend fun insertCategory(categoryEntity: CategoryEntity) =
         categoryDao.insertCategory(categoryEntity)
 
-    override suspend fun deleteCategory(categoryEntity: CategoryEntity) =
+    override suspend fun deleteCategory(categoryId: Long) =
+        categoryDao.deleteCategory(categoryId)
+
+    override suspend fun deleteCategory(categoryEntity: CategoryEntity) {
         categoryDao.deleteCategory(categoryEntity)
+    }
 
 }

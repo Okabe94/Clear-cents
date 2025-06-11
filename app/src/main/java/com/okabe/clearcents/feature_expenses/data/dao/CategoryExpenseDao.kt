@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Transaction
 import com.okabe.clearcents.feature_expenses.data.entity.CategoryExpenseEntity
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface CategoryExpenseDao {
@@ -13,7 +14,7 @@ interface CategoryExpenseDao {
 
     @Transaction
     @Query("SELECT * FROM categories ORDER BY name ASC")
-    suspend fun getAllCategoriesWithExpenses(): List<CategoryExpenseEntity>
+    fun getAllCategoriesWithExpenses(): Flow<List<CategoryExpenseEntity>>
 
     @Query(
         """

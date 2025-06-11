@@ -9,8 +9,10 @@ import com.okabe.clearcents.feature_expenses.domain.CategoryExpenseRepositoryImp
 import com.okabe.clearcents.feature_expenses.domain.CategoryRepositoryImpl
 import com.okabe.clearcents.feature_expenses.domain.ExpenseRepositoryImpl
 import com.okabe.clearcents.feature_expenses.presentation.create_category.CreateCategoryViewModel
+import com.okabe.clearcents.feature_expenses.presentation.dashboard.DashboardViewModel
 import org.koin.android.ext.koin.androidApplication
 import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.dsl.module
 
 private const val DB_NAME = "Expense_Database"
@@ -34,5 +36,6 @@ val appModule = module {
     single<CategoryRepository> { CategoryRepositoryImpl(get()) }
     single<CategoryExpenseRepository> { CategoryExpenseRepositoryImpl(get()) }
 
-    viewModel<CreateCategoryViewModel>()
+    viewModelOf(::CreateCategoryViewModel)
+    viewModelOf(::DashboardViewModel)
 }

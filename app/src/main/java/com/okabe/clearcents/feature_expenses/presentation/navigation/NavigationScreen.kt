@@ -2,16 +2,16 @@ package com.okabe.clearcents.feature_expenses.presentation.navigation
 
 import kotlinx.serialization.Serializable
 
-sealed interface Screen {
+sealed interface Destination {
     @Serializable
-    data object Home : Screen
+    data object DashboardDestination : Destination
 
     @Serializable
-    data object CreateExpense : Screen
+    data object CreateExpenseDestination : Destination
 
     @Serializable
-    data class CategoryDetail(val id: String) : Screen
+    data class CategoryDetailDestination(val id: Long) : Destination
 
     @Serializable
-    data object CreateCategory : Screen
+    data object CreateCategoryDestination : Destination
 }
