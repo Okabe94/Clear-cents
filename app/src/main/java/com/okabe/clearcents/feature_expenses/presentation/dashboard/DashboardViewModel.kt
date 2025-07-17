@@ -2,11 +2,11 @@ package com.okabe.clearcents.feature_expenses.presentation.dashboard
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.okabe.clearcents.feature_expenses.data.entity.CategoryExpenseEntity
-import com.okabe.clearcents.feature_expenses.data.entity.ExpenseEntity
-import com.okabe.clearcents.feature_expenses.data.repository.CategoryExpenseRepository
-import com.okabe.clearcents.feature_expenses.data.repository.CategoryRepository
-import com.okabe.clearcents.feature_expenses.data.repository.ExpenseRepository
+import com.okabe.clearcents.feature_expenses.domain.model.CategoryExpenseModel
+import com.okabe.clearcents.feature_expenses.domain.model.ExpenseModel
+import com.okabe.clearcents.feature_expenses.domain.repository.CategoryExpenseRepository
+import com.okabe.clearcents.feature_expenses.domain.repository.CategoryRepository
+import com.okabe.clearcents.feature_expenses.domain.repository.ExpenseRepository
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
@@ -32,7 +32,7 @@ class DashboardViewModel(
             is DashboardAction.OnCategoryDetail -> {
                 viewModelScope.launch {
                     expenseRepository.insertExpense(
-                        ExpenseEntity(
+                        ExpenseModel(
                             categoryIdForeign = action.categoryId,
                             amount = 100000L,
                             date = Date(),
@@ -55,7 +55,7 @@ class DashboardViewModel(
 
     }
 
-    private fun List<CategoryExpenseEntity>.mapToState(): DashboardState {
+    private fun List<CategoryExpenseModel>.mapToState(): DashboardState {
         var totalAmount = 0L
         val categories = this.map {
             val spent = it.expenses
@@ -65,9 +65,9 @@ class DashboardViewModel(
             totalAmount += spent
 
             DashboardCategory(
-                id = it.categoryEntity.categoryId,
-                name = it.categoryEntity.name,
-                monthlyBudget = it.categoryEntity.monthlyBudget,
+                id = it.categoryId,
+                name = it.name,
+                monthlyBudget = it.monthlyBudget,
                 spentAmount = spent
             )
         }

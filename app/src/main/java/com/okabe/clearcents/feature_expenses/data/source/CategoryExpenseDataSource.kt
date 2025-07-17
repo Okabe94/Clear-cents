@@ -1,9 +1,9 @@
-package com.okabe.clearcents.feature_expenses.data.repository
+package com.okabe.clearcents.feature_expenses.data.source
 
 import com.okabe.clearcents.feature_expenses.data.entity.CategoryExpenseEntity
 import kotlinx.coroutines.flow.Flow
 
-interface CategoryExpenseRepository {
+interface CategoryExpenseDataSource {
     fun getAllCategoriesWithExpenses(): Flow<List<CategoryExpenseEntity>>
     suspend fun getCategoryWithExpenses(categoryId: Long): CategoryExpenseEntity?
 

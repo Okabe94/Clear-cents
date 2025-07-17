@@ -11,13 +11,14 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.okabe.clearcents.feature_expenses.presentation.create_category.CreateCategoryRoot
 import com.okabe.clearcents.feature_expenses.presentation.create_category.CreateCategoryViewModel
+import com.okabe.clearcents.feature_expenses.presentation.create_expense.CreateExpenseRoot
+import com.okabe.clearcents.feature_expenses.presentation.create_expense.CreateExpenseViewModel
 import com.okabe.clearcents.feature_expenses.presentation.dashboard.DashboardRoot
 import com.okabe.clearcents.feature_expenses.presentation.dashboard.DashboardViewModel
 import com.okabe.clearcents.feature_expenses.presentation.navigation.Destination
@@ -72,23 +73,13 @@ fun AppNavigation(
                 navController = navController,
             )
         }
-//
-//        composable<CreateExpense> {
-//            AddExpenseScreen(
-//                navController = navController,
-//                categories = categories,
-//                onAddExpense = { amount, date, descriptionText, categoryId ->
-//                    val newExpense = Expense(
-//                        amount = amount,
-//                        date = date,
-//                        description = descriptionText,
-//                        categoryId = categoryId
-//                    )
-//                    onAddExpense(newExpense)
-//                    navController.popBackStack()
-//                }
-//            )
-//        }
+
+        composable<Destination.CreateExpenseDestination> {
+            CreateExpenseRoot(
+                viewModel = koinViewModel<CreateExpenseViewModel>(),
+                navController = navController,
+            )
+        }
 //
 //        composable<CreateCategory> {
 //            CreateCategoryScreen(

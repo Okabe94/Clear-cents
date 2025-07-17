@@ -1,9 +1,9 @@
-package com.okabe.clearcents.feature_expenses.data.repository
+package com.okabe.clearcents.feature_expenses.data.source
 
 import com.okabe.clearcents.feature_expenses.data.entity.ExpenseEntity
 import java.util.Date
 
-interface ExpenseRepository {
+interface ExpenseDataSource {
     suspend fun getExpenseById(id: Long): ExpenseEntity?
     suspend fun getExpensesBetweenDates(startDate: Date, endDate: Date): List<ExpenseEntity>
     suspend fun getExpensesForCategoryBetweenDates(
