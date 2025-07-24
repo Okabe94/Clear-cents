@@ -97,9 +97,9 @@ fun DashboardRoot(
                 DashboardAction.OnCreateExpense ->
                     navController.navigate(Destination.CreateExpenseDestination)
 
-//                is DashboardAction.OnCategoryDetail -> navController.navigate(
-//                    Destination.CategoryDetailDestination(it.categoryId)
-//                )
+                is DashboardAction.OnCategoryDetail -> navController.navigate(
+                    Destination.CategoryDetailDestination(it.categoryId)
+                )
 
                 else -> Unit
             }

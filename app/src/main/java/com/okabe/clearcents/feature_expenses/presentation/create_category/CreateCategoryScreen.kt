@@ -25,23 +25,18 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.OffsetMapping
-import androidx.compose.ui.text.input.TransformedText
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.okabe.clearcents.R
+import com.okabe.clearcents.feature_expenses.shared.MoneyTransformation
 import com.okabe.clearcents.ui.theme.ClearCentsTheme
 import com.okabe.clearcents.util.capitalizeWords
 import org.koin.androidx.compose.koinViewModel
-import java.text.NumberFormat
-import java.util.Locale
 
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Composable
@@ -115,7 +110,7 @@ fun CreateCategoryScreen(
                 onValueChange = { onAction(CreateCategoryAction.OnBudgetChange(it)) },
                 label = { Text(stringResource(R.string.monthly_budget_optional).capitalizeWords()) },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-                visualTransformation = NumberCommaTransformation()
+                visualTransformation = MoneyTransformation()
             )
 
 
@@ -131,24 +126,5 @@ fun CreateCategoryScreen(
                 Icon(Icons.Filled.Check, contentDescription = "Save Category")
             }
         }
-    }
-}
-
-class NumberCommaTransformation : VisualTransformation {
-    override fun filter(text: AnnotatedString): TransformedText {
-        return TransformedText(
-            text = AnnotatedString(text.text.toLongOrNull().formatWithComma()),
-            offsetMapping = object : OffsetMapping {
-                override fun originalToTransformed(offset: Int): Int =
-                    text.text.toLongOrNull().formatWithComma().length
-
-                override fun transformedToOriginal(offset: Int): Int = text.length
-            }
-        )
-    }
-
-    private fun Long?.formatWithComma(): String {
-        return if (this == null) ""
-        else NumberFormat.getNumberInstance(Locale.getDefault()).format(this)
     }
 }

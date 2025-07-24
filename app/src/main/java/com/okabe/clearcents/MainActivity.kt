@@ -15,6 +15,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
+import com.okabe.clearcents.feature_expenses.presentation.categoty_detail.CategoryDetailRoot
+import com.okabe.clearcents.feature_expenses.presentation.categoty_detail.CategoryDetailViewModel
 import com.okabe.clearcents.feature_expenses.presentation.create_category.CreateCategoryRoot
 import com.okabe.clearcents.feature_expenses.presentation.create_category.CreateCategoryViewModel
 import com.okabe.clearcents.feature_expenses.presentation.create_expense.CreateExpenseRoot
@@ -80,39 +83,13 @@ fun AppNavigation(
                 navController = navController,
             )
         }
-//
-//        composable<CreateCategory> {
-//            CreateCategoryScreen(
-//                navController = navController,
-//                onSaveCategory = { name, budget, iconName ->
-//                    val newCategory =
-//                        ExpenseCategory(name = name, monthlyBudget = budget, iconName = iconName)
-//                    onAddCategory(newCategory)
-//                    navController.popBackStack()
-//                }
-//            )
-//        }
-//
-//        composable<CategoryDetail> { backStackEntry ->
-//            val categoryId = backStackEntry.toRoute<CategoryDetail>().id
-//            val category = categories.find { it.id == categoryId }
-//            val categoryExpenses = expenses[categoryId] ?: emptyList()
-//
-//            if (category != null) {
-//                CategoryDetailsScreen(
-//                    navController = navController,
-//                    category = category,
-//                    expenses = categoryExpenses,
-//                    onDeleteExpense = onDeleteExpense,
-//                    onDeleteCategory = {
-//                        onDeleteCategory(category.id)
-//                        navController.popBackStack(Home, false)
-//                    }
-//                )
-//            } else {
-//                // Handle category not found, e.g., navigate back or show an error
-//                navController.popBackStack()
-//            }
-//        }
+
+        composable<Destination.CategoryDetailDestination> { backStackEntry ->
+            val categoryId = backStackEntry.toRoute<Destination.CategoryDetailDestination>().id
+
+            CategoryDetailRoot(
+                viewModel = koinViewModel<CategoryDetailViewModel>(),
+            )
+        }
     }
 }

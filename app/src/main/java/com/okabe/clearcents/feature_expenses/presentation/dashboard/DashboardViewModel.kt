@@ -29,18 +29,18 @@ class DashboardViewModel(
 
     fun onAction(action: DashboardAction) {
         when (action) {
-            is DashboardAction.OnCategoryDetail -> {
-                viewModelScope.launch {
-                    expenseRepository.insertExpense(
-                        ExpenseModel(
-                            categoryIdForeign = action.categoryId,
-                            amount = 100000L,
-                            date = Date(),
-                            description = null
-                        )
-                    )
-                }
-            }
+//            is DashboardAction.OnCategoryDetail -> {
+//                viewModelScope.launch {
+//                    expenseRepository.insertExpense(
+//                        ExpenseModel(
+//                            categoryIdForeign = action.categoryId,
+//                            amount = 100000L,
+//                            date = Date(),
+//                            description = null
+//                        )
+//                    )
+//                }
+//            }
 
             is DashboardAction.OnDeleteCategory -> {
                 viewModelScope.launch {

@@ -1,4 +1,4 @@
-package com.okabe.clearcents.feature_expenses.presentation
+package com.okabe.clearcents.feature_expenses.presentation.categoty_detail
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -38,171 +37,80 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.okabe.clearcents.feature_expenses.domain.model.ExpenseModel
 import com.okabe.clearcents.ui.theme.ClearCentsTheme
+import org.koin.androidx.compose.koinViewModel
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
-import java.util.Date
 import java.util.Locale
 
-@Preview(showBackground = true)
+@Preview
 @Composable
-fun CategoryDetailsScreenPreview() {
-    val navController = rememberNavController()
-    val sampleCategory = ExpenseCategory(
-        id = "1",
-        name = "Groceries",
-        monthlyBudget = 250.0,
-        iconName = "Groceries"
-    )
-    val sampleExpenses = listOf(
-        Expense(
-            id = "e1",
-            amount = 45.99,
-            date = Date(),
-            description = "Weekly Shopping at Aldi",
-            categoryId = "1"
-        ),
-        Expense(
-            id = "e2",
-            amount = 12.50,
-            date = Date(),
-            description = "Milk, Bread, Eggs",
-            categoryId = "1"
-        ),
-        Expense(
-            id = "e3",
-            amount = 250.0,
-            date = Date(),
-            description = "Big shop",
-            categoryId = "1"
-        )
-    )
+private fun Preview() {
     ClearCentsTheme {
-        CategoryDetailsScreen(
-            navController = navController,
-            category = sampleCategory,
-            expenses = sampleExpenses,
-            onDeleteExpense = {},
-            onDeleteCategory = {}
+        CategoryDetailScreen(
+            state = CategoryDetailState(),
+            onAction = {}
         )
     }
 }
 
-@Preview(showBackground = true)
 @Composable
-fun CategoryDetailsScreenOverBudgetPreview() {
-    val navController = rememberNavController()
-    val sampleCategory = ExpenseCategory(
-        id = "1",
-        name = "Entertainment",
-        monthlyBudget = 100.0,
-        iconName = "Entertainment"
-    )
-    val sampleExpenses = listOf(
-        Expense(
-            id = "e1",
-            amount = 70.0,
-            date = Date(),
-            description = "Cinema Tickets",
-            categoryId = "1"
-        ),
-        Expense(
-            id = "e2",
-            amount = 45.0,
-            date = Date(),
-            description = "Dinner Out",
-            categoryId = "1"
-        )
-    )
-    ClearCentsTheme {
-        CategoryDetailsScreen(
-            navController = navController,
-            category = sampleCategory,
-            expenses = sampleExpenses,
-            onDeleteExpense = {},
-            onDeleteCategory = {}
-        )
-    }
-}
+fun CategoryDetailRoot(
+    viewModel: CategoryDetailViewModel = koinViewModel()
+) {
+    val state by viewModel.state.collectAsStateWithLifecycle()
 
-@Preview(showBackground = true)
-@Composable
-fun CategoryDetailsScreenNoBudgetPreview() {
-    val navController = rememberNavController()
-    val sampleCategory = ExpenseCategory(
-        id = "1",
-        name = "Miscellaneous",
-        monthlyBudget = 0.0,
-        iconName = "Default"
+    CategoryDetailScreen(
+        state = state,
+        onAction = viewModel::onAction
     )
-    val sampleExpenses = listOf(
-        Expense(
-            id = "e1",
-            amount = 19.99,
-            date = Date(),
-            description = "Online Subscription",
-            categoryId = "1"
-        )
-    )
-    ClearCentsTheme {
-        CategoryDetailsScreen(
-            navController = navController,
-            category = sampleCategory,
-            expenses = sampleExpenses,
-            onDeleteExpense = {},
-            onDeleteCategory = {}
-        )
-    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CategoryDetailsScreen(
-    navController: NavController,
-    category: ExpenseCategory,
-    expenses: List<Expense>,
-    onDeleteExpense: (Expense) -> Unit,
-    onDeleteCategory: () -> Unit
+fun CategoryDetailScreen(
+    state: CategoryDetailState,
+    onAction: (CategoryDetailAction) -> Unit,
 ) {
-    val currencyFormat = NumberFormat.getCurrencyInstance(Locale.getDefault())
-    val totalSpentInCategory = expenses.sumOf { it.amount }
-    var showCategoryMenu by remember { mutableStateOf(false) }
-    var showDeleteCategoryDialog by remember { mutableStateOf(false) }
-    var expenseToDelete by remember { mutableStateOf<Expense?>(null) }
-
-
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(category.name) },
+                title = { Text(state.name) },
                 navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.Filled.ArrowBack, contentDescription = "Back")
+                    IconButton(onClick = { }) {
+                        Icon(
+                            imageVector = Icons.Filled.ArrowBack,
+                            contentDescription = "Back"
+                        )
                     }
                 },
                 actions = {
                     Box {
-                        IconButton(onClick = { showCategoryMenu = true }) {
-                            Icon(Icons.Filled.MoreVert, contentDescription = "Category Options")
+                        IconButton(onClick = {
+                            // Open category menu
+                        }) {
+                            Icon(
+                                imageVector = Icons.Filled.MoreVert,
+                                contentDescription = "Category Options"
+                            )
                         }
+
                         DropdownMenu(
-                            expanded = showCategoryMenu,
-                            onDismissRequest = { showCategoryMenu = false }
+                            expanded = state.showCategoryMenu,
+                            onDismissRequest = { /* Close menu */ }
                         ) {
                             DropdownMenuItem(
                                 text = { Text("Edit Category") },
                                 onClick = {
-                                    showCategoryMenu = false
+                                    // showCategoryMenu = false
                                     // TODO: Navigate to an EditCategoryScreen (similar to CreateCategoryScreen)
                                     // navController.navigate("edit_category/${category.id}")
                                 },
@@ -216,8 +124,8 @@ fun CategoryDetailsScreen(
                             DropdownMenuItem(
                                 text = { Text("Delete Category") },
                                 onClick = {
-                                    showCategoryMenu = false
-                                    showDeleteCategoryDialog = true
+                                    // showCategoryMenu = false
+                                    // showDeleteCategoryDialog = true
                                 },
                                 leadingIcon = {
                                     Icon(
@@ -243,7 +151,10 @@ fun CategoryDetailsScreen(
                     // Navigate to AddExpenseScreen, pre-filling this category
                 }
             ) {
-                Icon(Icons.Filled.Add, contentDescription = "Add Expense to ${category.name}")
+                Icon(
+                    Icons.Filled.Add,
+                    contentDescription = "Add Expense to ${state.name}"
+                )
             }
         }
     ) { paddingValues ->
@@ -258,34 +169,45 @@ fun CategoryDetailsScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 16.dp),
-                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+                elevation = CardDefaults.cardElevation(
+                    defaultElevation = 4.dp
+                )
             ) {
-                Column(modifier = Modifier.padding(16.dp)) {
+                Column(
+                    modifier = Modifier.padding(
+                        16.dp
+                    )
+                ) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(
-                            imageVector = CategoryIcons.getIconByName(category.iconName),
-                            contentDescription = category.name,
-                            modifier = Modifier.size(50.dp),
-                            tint = MaterialTheme.colorScheme.primary
-                        )
-                        Spacer(modifier = Modifier.width(16.dp))
                         Text(
-                            category.name,
-                            style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold)
+                            state.name,
+                            style = MaterialTheme.typography.headlineSmall.copy(
+                                fontWeight = FontWeight.Bold
+                            )
                         )
                     }
-                    Spacer(modifier = Modifier.height(12.dp))
+
+                    Spacer(
+                        modifier = Modifier.height(
+                            12.dp
+                        )
+                    )
+
                     Text(
-                        "Total Spent: ${currencyFormat.format(totalSpentInCategory)}",
+                        "Total Spent: ${currencyFormat(state.totalSpent)}",
                         style = MaterialTheme.typography.titleMedium
                     )
-                    if (category.monthlyBudget > 0) {
+                    if (state.monthlyBudget > 0) {
                         Text(
-                            "Budget: ${currencyFormat.format(category.monthlyBudget)}",
+                            "Budget: ${currencyFormat(state.monthlyBudget)}",
                             style = MaterialTheme.typography.titleMedium
                         )
-                        Spacer(modifier = Modifier.height(8.dp))
-                        val progress = (totalSpentInCategory / category.monthlyBudget).toFloat()
+                        Spacer(
+                            modifier = Modifier.height(
+                                8.dp
+                            )
+                        )
+                        val progress = (state.totalSpent / state.monthlyBudget).toFloat()
                             .coerceIn(0f, 1f)
                         LinearProgressIndicator(
                             progress = { progress },
@@ -297,17 +219,21 @@ fun CategoryDetailsScreen(
                             else MaterialTheme.colorScheme.primary,
                             trackColor = MaterialTheme.colorScheme.surfaceVariant
                         )
-                        val budgetStatusText = when {
-                            totalSpentInCategory > category.monthlyBudget ->
-                                "Over budget by ${currencyFormat.format(totalSpentInCategory - category.monthlyBudget)}"
 
-                            totalSpentInCategory == category.monthlyBudget -> "Budget reached"
-                            else -> "${currencyFormat.format(category.monthlyBudget - totalSpentInCategory)} remaining"
+                        val budgetStatusText = when {
+                            state.totalSpent > state.monthlyBudget ->
+                                "Over budget by ${currencyFormat(state.totalSpent - state.monthlyBudget)}"
+
+                            state.totalSpent == state.monthlyBudget -> "Budget reached"
+                            else -> "${currencyFormat(state.monthlyBudget - state.totalSpent)} remaining"
                         }
+
                         Text(
                             budgetStatusText,
                             style = MaterialTheme.typography.bodySmall,
-                            color = if (totalSpentInCategory > category.monthlyBudget) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant,
+                            color =
+                                if (state.totalSpent > state.monthlyBudget) MaterialTheme.colorScheme.error
+                                else MaterialTheme.colorScheme.onSurfaceVariant,
                             modifier = Modifier.padding(top = 4.dp)
                         )
 
@@ -323,25 +249,34 @@ fun CategoryDetailsScreen(
 
             // Expenses List
             Text(
-                "Expenses in ${category.name}",
+                "Expenses in ${state.name}",
                 style = MaterialTheme.typography.titleLarge,
                 modifier = Modifier.padding(bottom = 8.dp)
             )
-            if (expenses.isEmpty()) {
-                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            if (state.expenses.isEmpty()) {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
                     Text(
                         "No expenses recorded for this category yet.",
                         style = MaterialTheme.typography.bodyLarge
                     )
                 }
             } else {
-                LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    items(expenses, key = { expense -> expense.id }) { expense ->
+                LazyColumn(
+                    verticalArrangement = Arrangement.spacedBy(
+                        8.dp
+                    )
+                ) {
+                    items(
+                        state.expenses,
+                        key = { expense -> expense.expenseId }
+                    ) { expense ->
                         ExpenseDetailsRow(
                             expense = expense,
-                            currencyFormat = currencyFormat,
                             onDeleteClick = {
-                                expenseToDelete = expense
+                                // expenseToDelete = expense
                             } // Show confirmation dialog
                         )
                     }
@@ -350,51 +285,52 @@ fun CategoryDetailsScreen(
         }
 
         // Confirmation Dialog for Deleting Expense
-        if (expenseToDelete != null) {
+        if (state.expenseToDelete != null) {
             AlertDialog(
-                onDismissRequest = { expenseToDelete = null },
+                onDismissRequest = {
+                    // state.expenseToDelete = null
+                },
                 title = { Text("Delete Expense?") },
                 text = {
                     Text(
                         "Are you sure you want to delete the expense: ${
-                            expenseToDelete!!.description ?: currencyFormat.format(
-                                expenseToDelete!!.amount
+                            state.expenseToDelete!!.description ?: currencyFormat(
+                                state.expenseToDelete!!.amount
                             )
                         }?"
                     )
                 },
                 confirmButton = {
                     TextButton(
-                        onClick = {
-                            onDeleteExpense(expenseToDelete!!)
-                            expenseToDelete = null
-                        }
+                        onClick = { }
                     ) { Text("Delete") }
                 },
                 dismissButton = {
-                    TextButton(onClick = { expenseToDelete = null }) { Text("Cancel") }
+                    TextButton(onClick = {
+                        // expenseToDelete = null
+                    }) { Text("Cancel") }
                 }
             )
         }
 
         // Confirmation Dialog for Deleting Category
-        if (showDeleteCategoryDialog) {
+        if (state.showDeleteCategoryDialog) {
             AlertDialog(
-                onDismissRequest = { showDeleteCategoryDialog = false },
-                title = { Text("Delete Category '${category.name}'?") },
+                onDismissRequest = {
+                    // showDeleteCategoryDialog = false
+                },
+                title = { Text("Delete Category '${state.name}'?") },
                 text = { Text("Are you sure you want to delete this category and all its expenses? This action cannot be undone.") },
                 confirmButton = {
                     TextButton(
-                        onClick = {
-                            onDeleteCategory()
-                            showDeleteCategoryDialog = false
-                            // Navigation is handled in AppNavigation after onDeleteCategory callback
-                        },
-                        colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.error)
+                        onClick = { },
+                        colors = ButtonDefaults.textButtonColors(
+                            contentColor = MaterialTheme.colorScheme.error
+                        )
                     ) { Text("Delete") }
                 },
                 dismissButton = {
-                    TextButton(onClick = { showDeleteCategoryDialog = false }) { Text("Cancel") }
+                    TextButton(onClick = { }) { Text("Cancel") }
                 }
             )
         }
@@ -402,9 +338,8 @@ fun CategoryDetailsScreen(
 }
 
 @Composable
-fun ExpenseDetailsRow(
-    expense: Expense,
-    currencyFormat: NumberFormat,
+private fun ExpenseDetailsRow(
+    expense: ExpenseModel,
     onDeleteClick: () -> Unit
 ) {
     val dateFormatter = remember { SimpleDateFormat("MMM dd, yyyy", Locale.getDefault()) }
@@ -434,7 +369,7 @@ fun ExpenseDetailsRow(
             }
             Spacer(modifier = Modifier.width(16.dp))
             Text(
-                currencyFormat.format(expense.amount),
+                currencyFormat(expense.amount),
                 style = MaterialTheme.typography.bodyLarge,
                 fontWeight = FontWeight.Medium,
                 color = MaterialTheme.colorScheme.error // Typically expenses are shown in a 'negative' color
@@ -448,4 +383,9 @@ fun ExpenseDetailsRow(
             }
         }
     }
+}
+
+private fun currencyFormat(amount: Long): String {
+    val formatter = NumberFormat.getCurrencyInstance()
+    return formatter.format(amount)
 }
