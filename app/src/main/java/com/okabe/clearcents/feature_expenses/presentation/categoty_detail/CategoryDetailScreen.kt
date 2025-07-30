@@ -56,7 +56,11 @@ import java.util.Locale
 private fun Preview() {
     ClearCentsTheme {
         CategoryDetailScreen(
-            state = CategoryDetailState(),
+            state = CategoryDetailState(
+                name = "Food",
+                monthlyBudget = 100000L,
+                totalSpent = 50000L,
+            ),
             onAction = {}
         )
     }
@@ -94,9 +98,11 @@ fun CategoryDetailScreen(
                 },
                 actions = {
                     Box {
-                        IconButton(onClick = {
-                            // Open category menu
-                        }) {
+                        IconButton(
+                            onClick = {
+                                // Open category menu
+                            }
+                        ) {
                             Icon(
                                 imageVector = Icons.Filled.MoreVert,
                                 contentDescription = "Category Options"
@@ -197,7 +203,8 @@ fun CategoryDetailScreen(
                         "Total Spent: ${currencyFormat(state.totalSpent)}",
                         style = MaterialTheme.typography.titleMedium
                     )
-                    if (state.monthlyBudget > 0) {
+
+                    if (state.monthlyBudget != null && state.monthlyBudget > 0) {
                         Text(
                             "Budget: ${currencyFormat(state.monthlyBudget)}",
                             style = MaterialTheme.typography.titleMedium
@@ -372,7 +379,7 @@ private fun ExpenseDetailsRow(
                 currencyFormat(expense.amount),
                 style = MaterialTheme.typography.bodyLarge,
                 fontWeight = FontWeight.Medium,
-                color = MaterialTheme.colorScheme.error // Typically expenses are shown in a 'negative' color
+                color = MaterialTheme.colorScheme.error
             )
             IconButton(onClick = onDeleteClick) {
                 Icon(

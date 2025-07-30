@@ -8,7 +8,7 @@ import com.okabe.clearcents.feature_expenses.data.entity.ExpenseEntity
 import com.okabe.clearcents.feature_expenses.data.mapper.CategoryExpenseMapper
 import com.okabe.clearcents.feature_expenses.data.mapper.CategoryMapper
 import com.okabe.clearcents.feature_expenses.data.mapper.ExpenseMapper
-import com.okabe.clearcents.feature_expenses.data.mapper.Mapper
+import com.okabe.clearcents.feature_expenses.domain.mapper.Mapper
 import com.okabe.clearcents.feature_expenses.data.repository.CategoryExpenseRepositoryImpl
 import com.okabe.clearcents.feature_expenses.data.repository.CategoryRepositoryImpl
 import com.okabe.clearcents.feature_expenses.data.repository.ExpenseRepositoryImpl
@@ -18,6 +18,7 @@ import com.okabe.clearcents.feature_expenses.data.source.ExpenseDataSource
 import com.okabe.clearcents.feature_expenses.data.source.local.LocalCategoryDataSource
 import com.okabe.clearcents.feature_expenses.data.source.local.LocalCategoryExpenseDataSource
 import com.okabe.clearcents.feature_expenses.data.source.local.LocalExpenseDataSource
+import com.okabe.clearcents.feature_expenses.domain.mapper.ListMapper
 import com.okabe.clearcents.feature_expenses.domain.model.CategoryExpenseModel
 import com.okabe.clearcents.feature_expenses.domain.model.CategoryModel
 import com.okabe.clearcents.feature_expenses.domain.model.ExpenseModel
@@ -64,7 +65,7 @@ val featureExpenseModule = module {
 
     // Provides the mappers
     singleOf(::ExpenseMapper) {
-        bind<Mapper<ExpenseEntity, ExpenseModel>>()
+        bind<ListMapper<ExpenseEntity, ExpenseModel>>()
     }
     singleOf(::CategoryMapper) {
         bind<Mapper<CategoryEntity, CategoryModel>>()

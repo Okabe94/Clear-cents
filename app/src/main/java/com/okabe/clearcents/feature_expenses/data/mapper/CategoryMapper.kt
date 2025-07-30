@@ -1,6 +1,7 @@
 package com.okabe.clearcents.feature_expenses.data.mapper
 
 import com.okabe.clearcents.feature_expenses.data.entity.CategoryEntity
+import com.okabe.clearcents.feature_expenses.domain.mapper.Mapper
 import com.okabe.clearcents.feature_expenses.domain.model.CategoryModel
 
 class CategoryMapper : Mapper<CategoryEntity, CategoryModel> {

@@ -26,7 +26,9 @@ import com.okabe.clearcents.feature_expenses.presentation.dashboard.DashboardRoo
 import com.okabe.clearcents.feature_expenses.presentation.dashboard.DashboardViewModel
 import com.okabe.clearcents.feature_expenses.presentation.navigation.Destination
 import com.okabe.clearcents.ui.theme.ClearCentsTheme
+import org.koin.androidx.compose.getViewModel
 import org.koin.androidx.compose.koinViewModel
+import org.koin.core.parameter.parametersOf
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -88,7 +90,9 @@ fun AppNavigation(
             val categoryId = backStackEntry.toRoute<Destination.CategoryDetailDestination>().id
 
             CategoryDetailRoot(
-                viewModel = koinViewModel<CategoryDetailViewModel>(),
+                viewModel = getViewModel<CategoryDetailViewModel>(
+                    parameters = { parametersOf(categoryId) }
+                ),
             )
         }
     }
